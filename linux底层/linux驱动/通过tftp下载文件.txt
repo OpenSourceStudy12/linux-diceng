@@ -1,0 +1,17 @@
+Transfer a file from/to tftp server
+
+Options:
+        -l FILE Local FILE
+        -r FILE Remote FILE
+        -g      Get file
+        -p      Put file
+        -b SIZE Transfer blocks of SIZE octets
+
+# ifconfig
+# ifconfig eth0 192.168.1.199
+eth0: link down
+# eth0: link up, 100Mbps, full-duplex, lpa 0x4DE1
+
+# tftp -r madplay -p 192.168.1.200
+tftp: timeout
+# tftp -r madplay -g 192.168.1.200

@@ -1,0 +1,1 @@
+mkimage -A arm -O linux -T kernel -C none -a 0x30008000 -e 0x30008040 -n "Linux kernel Image by embedclub" -d zImage uImage

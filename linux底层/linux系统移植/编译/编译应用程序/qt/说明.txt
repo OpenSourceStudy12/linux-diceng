@@ -1,0 +1,5 @@
+这是一个简单的MP3播放QT图形化界面
+
+要求：
+     madpler可执行程序存储在/root/mp3/目录下
+     hetangyuese.mp3歌曲也存储在/root/mp3/目录下

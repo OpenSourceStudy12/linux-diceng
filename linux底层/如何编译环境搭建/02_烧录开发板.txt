@@ -1,0 +1,30 @@
+开发板烧录：
+	1 准备工作：
+		a) 安装windows工具：DNW和tftp，已经usb驱动，安装包在 linux系统移植/src/x35 目录下
+		b) 编译生成u-boot.bin uImage root.image三个镜像并拷贝到windows系统下
+			将u-boot.bin放在桌面即可.
+			uImage和root.image放在c:/program files/tftpdwin目录下
+		c) 开发板和电脑连接:USB，网线，串口线
+		d) 配置超级终端（或者其他串口调试助手）
+			波特率 115200
+			硬件流控制 无
+			其他设置不变
+			验证连接是否OK：将开发板切换到Nor Flash，启动电源，超级终端出现配置信息即为正常。
+	2 烧录uboot.bin
+		a) 将开发板切换到Nor Flash，启动电源
+		b) 在超级终端依次输入 x f a（清除flash并进入下载模式）
+		c) 打开DNW软件，USB PORT->Trasmit/Restore ，选择u-boot.bin。
+		d) 将开关拨到nand flash,重启，查看串口log，报错提示 没有内核。
+	3 烧录uImage 和root.image
+		a) 修改电脑ip为 192.168.1.200
+		b) 打开tftp软件
+		c) 切换到超级终端，依次输入下面6行指令
+			tftp 0x30008000 uImage
+			nand erase 60000 500000
+			nand write 0x30008000 60000 500000
+
+			tftp 0x30008000 root.image
+			nand erase 560000 $filesize
+			nand write.yaffs2 0x30008000 560000 $filesize
+		提示OK之后，重启开发板，即可进入操作系统
+		

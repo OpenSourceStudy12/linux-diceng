@@ -1,0 +1,9 @@
+  执行以下命令：
+  mkdir  /root/myself 
+  cd   /root/myself/
+复制ncurses.tar.gz到/root/myself
+  tar  xzf   ncurses.tar.gz
+  cd   ncurses-5.6
+  ./configure   --with-shared   --prefix=/usr
+  make
+  sudo  make  install

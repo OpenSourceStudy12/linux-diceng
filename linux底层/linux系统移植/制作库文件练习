@@ -1,0 +1,77 @@
+实训目的
+    通过对linux下的库文件的制作，进一步巩固学生库文件制作的理解
+实训内容
+   （1）使用vi编辑器，在同一目录下编辑三个简单的程序：main.c、ku1.c和ku2.c的文件中
+/*main.c*/  
+#include <stdio.h>
+extern int max1();
+int  x;
+int  y;
+int main()
+{
+   printf("please input two number:\n");
+   scanf("%d%d", &x, &y);
+   printf("max is %d\n", max1());
+}
+
+/*ku1.c*/  
+extern int max2();
+int max1()
+{
+  int c;
+  c = max2();
+   return  c;
+}
+
+/*ku2.c*/
+extern  int x;
+extern  int y;
+
+int max2()
+{
+   int sum;
+   int product;
+   sum=x+y;
+   product=x*y;
+   return  sum>product? sum:product;
+}
+     
+   （2）制作出ku1.o、ku2.o与main.o文件
+   （3）制作出libku.a
+   （4）制作出可执行程序main
+   （5）运行验证（删除libmyfile1.a再验证）
+   （6）删除main
+   （7）制作出libku.so
+   （8）制作出可执行程序main
+   （9）运行验证（注意目录/usr/lib/下的libku.so文件）
+   
+实训步骤
+   （1）在工作目录下新建文件main.c、ku1.c  ku2.c，并用Vi启动：vi  main.c、 vi  ku1.c 、 vi  ku2.c
+   （2）在shell中输入命令：
+              gcc  -c  main.c  -o   main.o  ，然后输入-o    ku1.o    ，然后输入命令ls验证
+	      gcc  -c  ku1.c  命令ls验证
+	      gcc  -c  ku2.c  -o    ku2.o    ，然后输入命令ls验证
+                    
+   （3）在shell中输入命令ar cr  libku.a  ku1.o ku2.o ，然后输入命令ls验证
+   （4）在shell中输入命令gcc main.o  libku.a   -o main  
+   （5）输入命令：./main 运行验证，删除libku.a后再运行验证
+   （6）在shell中输入命令gcc -shared -FPCI -o libku.so ku1.o ku2.o ，然后输入命令ls验证
+   （7）在shell中输入命令gcc main.o  -L.  -lku -o   main
+   （8）输入命令：./main 运行验证，
+        若不能运行  
+        将libku.so复制到/usr/lib/目录下， 再后运行验证
+
+注1：使用ldd main 可查询可执行程序使用的库文件来自哪里
+    思考以下几个命令的区别：
+          gcc main.o  -L.  -lku -o   main
+          gcc main.o  ./libku.so -o   main
+	  gcc main.o  libku.so   -o   main
+注2：
+    无论何时载入程序打算运行时，共享库都应该位于以下位置：
+
+    （1）环境变量LD_LIBRARY_PATH列出的所有用分号分隔的位置
+          export  LD_LIBRARY_PATH=~~~~~~:$LD_LIBRARY_PATH
+    （2）文件/etc/ld.so.cache中找到的库的列表，由工具ldconfig维护
+    （3）目录/lib
+    （4）目录/usr/lib
+

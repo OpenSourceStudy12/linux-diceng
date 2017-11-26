@@ -1,0 +1,33 @@
+1 移植u-boot.bin
+	让学生参考 linux系统移植/编译/编译、配置u-boot/ 目录下的《u-boot移植》进行u-boot移植，标准源码就用 编译、配置u-boot 目录下的 [u-boot-2010.03.tar.bz2]
+
+2 编译uImage
+	sudo passwd root (配置超级用户密码)
+	su (切换到超级用户)
+	a) 安装交叉编译器
+		cd /home/zm/src_mini2440 (该目录下有本课程所需要用到的所有压缩包)
+		tar zxvf arm-linux-gcc-4.3.2.tgz -C /  
+		export PATH=/usr/local/arm/4.3.2/bin:$PATH
+		which arm-linux-gcc (检测编译器是否安装OK，如果提示路径，即为正常)
+		注：export PATH=/usr/local/arm/4.3.2/bin:$PATH 这句话是临时变量，只对当前窗口有效，如果进入其他窗口，需要重新输入export这句话，否则编译内核源码时会编译报错(arm-linux-gcc:命令未找到)
+	b) 编译内核源码
+		mkdir /root/mini2440
+		tar zxvf linux-2.6.32.2-mini2440-20100921.tar.gz -C /root/mini2440
+		cd /root/mini2440/linux-2.6.32.2/
+		cp config_mini2440_x35 .config
+		make menuconfig (这一步会报错，提示缺少ncurses,参照 linux驱动 目录下的《urses步骤安装ncurses步骤》进行安装)
+		选择 Load an Alternate Configuration File，然后输入 .config,退出并保存
+		make zImage	(编译完成后，会在 arch/arm/boot 目录下生成zImage镜像文件)
+	c) zImage -> uImage
+		cd /home/zm/src_mini2440
+		tar zxvf bootloader.tgz -C /root/mini2440
+		cp /root/mini2440/bootloader/u-boot-1.1.6/tools/mkimage /usr/bin/
+		cp ./mkz2uimage /root/mini2440/linux-2.6.32.2/arch/arm/boot/
+		cd /root/mini2440/linux-2.6.32.2/arch/arm/boot/
+		chmod 777 mkz2uimage
+		./mkz2uimage zImage uImage 
+
+3 制作root.image
+	让学生参考 linux系统移植/编译/制作根文件系统/rootfs 目录下的《制作根文件系统.pdf》进行根文件系统的制作
+	注：在执行make menuconfig配置busybox时，可能会报错，解决方法：
+		按照提示删除431行“%”左边的“config”和1279行“%”左边的“/”
